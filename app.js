@@ -2,14 +2,14 @@
 module.exports = app => {
     app.beforeStart(async function () {
         app.logger.info('-------Welcome BMS Server-------');
-        const eggResult = await app.curl('https://registry.npm.taobao.org/egg/latest', {
+        /*const eggResult = await app.curl('https://registry.npm.taobao.org/egg/latest', {
             dataType: 'json',
         });
         const dvaResult = await app.curl('https://registry.npm.taobao.org/dva/latest', {
             dataType: 'json',
         });
         app.logger.info('egg latest version: %s', eggResult.data.version);
-        app.logger.info('dva latest version: %s', dvaResult.data.version);
+        app.logger.info('dva latest version: %s', dvaResult.data.version);*/
 
     });
 

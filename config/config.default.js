@@ -66,7 +66,8 @@ module.exports = appInfo => {
                 ignoreJSON: true,
                 queryName: '_csrf', // 通过 query 传递 CSRF token 的默认字段为 _csrf
                 bodyName: '_csrf', // 通过 body 传递 CSRF token 的默认字段为 _csrf
-                headerName: 'x-csrf-token'// 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
+                headerName: 'x-csrf-token',// 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
+                cookieName: 'csrfToken',// Cookie 中的字段名，默认为 csrfToken
             }
         }
 
