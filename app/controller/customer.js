@@ -53,8 +53,8 @@ class CustomerController extends Controller {
     //删除/customer/:id DELETE
     async destroy(ctx) {
         try {
-            const customer = await ctx.service.customer.destroy();
-            this.success(customer);
+            await ctx.service.customer.destroy();
+            this.success({});
         }
         catch (e) {
             ctx.logger.error(new Error(e));

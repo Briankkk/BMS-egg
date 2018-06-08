@@ -10,7 +10,7 @@ module.exports = appInfo => {
             },
         },
         mysql:{
-            client: {
+            /*client: {
                 // host
                 host: '127.0.0.1',
                 // 端口号
@@ -21,11 +21,11 @@ module.exports = appInfo => {
                 password: 'tianyaIBICF9',
                 // 数据库名
                 database: 'bms',
-            },
+            },*/
 
-            /*clients: {
+            clients: {
                 // clientId, 获取client实例，需要通过 app.mysql.get('clientId') 获取
-                db1: {
+                db_global: {
                     // host
                     host: '127.0.0.1',
                     // 端口号
@@ -50,7 +50,7 @@ module.exports = appInfo => {
                     database: 'bms',
                 },
                 // ...
-            },*/
+            },
 
             // 是否加载到 app 上，默认开启
             app: true,
@@ -62,8 +62,7 @@ module.exports = appInfo => {
 
         security : {
             csrf: {
-                enable: true,
-                ignoreJSON: true,
+                enable: false,
                 queryName: '_csrf', // 通过 query 传递 CSRF token 的默认字段为 _csrf
                 bodyName: '_csrf', // 通过 body 传递 CSRF token 的默认字段为 _csrf
                 headerName: 'x-csrf-token',// 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
