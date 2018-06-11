@@ -1,5 +1,5 @@
 'use strict';
-
+const _ = require('lodash');
 module.exports = appInfo => {
 
     const config = {
@@ -9,19 +9,19 @@ module.exports = appInfo => {
                 '.tpl': 'nunjucks',
             },
         },
-        mysql:{
+        mysql: {
             /*client: {
-                // host
-                host: '127.0.0.1',
-                // 端口号
-                port: '3306',
-                // 用户名
-                user: 'root',
-                // 密码
-                password: 'tianyaIBICF9',
-                // 数据库名
-                database: 'bms',
-            },*/
+             // host
+             host: '127.0.0.1',
+             // 端口号
+             port: '3306',
+             // 用户名
+             user: 'root',
+             // 密码
+             password: 'tianyaIBICF9',
+             // 数据库名
+             database: 'bms',
+             },*/
 
             clients: {
                 // clientId, 获取client实例，需要通过 app.mysql.get('clientId') 获取
@@ -60,13 +60,37 @@ module.exports = appInfo => {
 
         },
 
-        security : {
+        security: {
             csrf: {
                 enable: false,
                 queryName: '_csrf', // 通过 query 传递 CSRF token 的默认字段为 _csrf
                 bodyName: '_csrf', // 通过 body 传递 CSRF token 的默认字段为 _csrf
                 headerName: 'x-csrf-token',// 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
                 cookieName: 'csrfToken',// Cookie 中的字段名，默认为 csrfToken
+            }
+        },
+        middleware: ['robot','gzip','pagination'],
+        gzip: {
+            threshold: 1024, // 小于 1k 的响应体不压缩
+        },
+        robot: {
+            ua: [
+                /Baiduspider/i,
+            ]
+        },
+        pagination: {
+            match(ctx) {
+                const urlArray = ['/customer'];
+                let flag = false;
+                if (ctx.request.method === 'GET') {
+                    _.forEach(urlArray, function (url) {
+                        if (ctx.request.url.split('?')[0] === url || ctx.request.url.split('?')[0].indexOf(url) !== -1) {
+                            flag = true;
+                            return false;
+                        }
+                    });
+                }
+                return flag;
             }
         }
 
@@ -75,8 +99,7 @@ module.exports = appInfo => {
     // use for cookie sign key, should change to your own and keep security
     config.keys = appInfo.name + '_1528262393100_3897';
 
-    // add your config here
-    config.middleware = [];
+
 
     return config;
 };

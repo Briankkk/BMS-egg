@@ -3,19 +3,11 @@ const Service = require('egg').Service;
 class CustomerService extends Service {
     async index() {
         const client_global = this.app.mysql.get('db_global');
-        //console.log(this.ctx.query.PAGE_SIZE)
-        //console.log(this.ctx.query.PAGE_INDEX)
-        const PAGE_SIZE = parseInt(this.ctx.query.PAGE_SIZE);
-        const PAGE_INDEX = parseInt(this.ctx.query.PAGE_INDEX);
-        const customers = await client_global.select('customer',{
-            //CUST_ID:this.ctx.session.staff.CUST_ID,
-            where: { CUST_ID: this.ctx.session.staff.CUST_ID},
-            //columns: ['author', 'title'], // 要查询的表字段
-            //orders: [['created_at','desc'], ['id','desc']], // 排序方式
-            limit: PAGE_SIZE ,
-            offset: (PAGE_INDEX - 1) * PAGE_SIZE,
-        });
-        return customers;
+        const helper = this.ctx.helper;
+        const total = await client_global.query('select count(1) cnt from customer where CUST_ID=?'+helper.convertWhere(),helper.convertValue());
+        const customers = await client_global.query('select * from customer where CUST_ID=? '+helper.convertWhere()+ helper.convertOrder()+helper.convertLimit(),helper.convertValue());
+
+        return {total:total[0].cnt,list:customers};
     }
 
     async show() {
@@ -37,7 +29,6 @@ class CustomerService extends Service {
                 CUSTOMER_ID: this.ctx.params.id
             }
         };
-
         const result = await client_global.update('customer',{...customer,UPDATE_TIME:client_global.literals.now},options);
         return result;
     }
