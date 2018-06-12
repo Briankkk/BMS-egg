@@ -59,7 +59,6 @@ module.exports = appInfo => {
 
 
         },
-
         security: {
             csrf: {
                 enable: false,
@@ -68,6 +67,9 @@ module.exports = appInfo => {
                 headerName: 'x-csrf-token',// 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
                 cookieName: 'csrfToken',// Cookie 中的字段名，默认为 csrfToken
             }
+        },
+        multipart: {
+            fileExtensions: [ '.xlsx' ], // 增加对 .xlsx 扩展名的支持
         },
         middleware: ['robot','gzip','pagination'],
         gzip: {
@@ -92,14 +94,11 @@ module.exports = appInfo => {
                 }
                 return flag;
             }
-        }
+        },
+
 
     };
-
-    // use for cookie sign key, should change to your own and keep security
-    config.keys = appInfo.name + '_1528262393100_3897';
-
-
+    config.keys = "SmartBMSServer";
 
     return config;
 };

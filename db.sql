@@ -44,7 +44,7 @@ create table STAFF
    CUST_ID              int(10)                        null,
    STAFF_NAME           varchar(60)                    not null,
    STAFF_CODE           varchar(60)                    not null,
-   PASSWORD             varchar(60)                    not null,
+   PASSWORD             varchar(256)                    not null,
    STAFF_ROLE           varchar(60)                    not null,
    AUTH_CODE_C          varchar(60)                    null,
    AUTH_CODE_S          varchar(60)                    null,
@@ -63,7 +63,7 @@ alter table STAFF
       on delete restrict;
 
 
-insert into STAFF(CUST_ID,STAFF_NAME,STAFF_CODE,PASSWORD,STAFF_ROLE)  values(1,'Admin','admin','888888','0');
+insert into STAFF(CUST_ID,STAFF_NAME,STAFF_CODE,PASSWORD,STAFF_ROLE)  values(1,'Admin','admin','09472b87a00588ce898737b10fe1d86fd415097c436cf691ea3db2d42460384c','0');
 
 
 if exists(select 1 from sys.sysforeignkey where role='FK_CUSTOMER_REFERENCE_CUST') then

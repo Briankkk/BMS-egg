@@ -3,7 +3,6 @@
 const Controller = require('../core/base_controller');
 
 class CustomerController extends Controller {
-
     //查询/customer GET
     async index(ctx) {
         try {

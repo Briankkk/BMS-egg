@@ -1,6 +1,9 @@
 'use strict';
 
-const Controller = require('../core/base_controller');
+const Controller = require('../core/base_controller')
+const crypto = require('crypto');
+const config = require('../../config/config.default');
+
 
 class HomeController extends Controller {
     async index() {
@@ -30,7 +33,11 @@ class HomeController extends Controller {
         try {
             //this.ctx.validate(loginRule);
             const {userName, password} = ctx.request.body;
-            const staff = await ctx.service.home.login(userName,password);
+
+
+            const staff = await ctx.service.home.login(userName,crypto.createHmac('sha256', config().keys)
+                .update(password)
+                .digest('hex'));
             if (staff) {
                 ctx.session.staff=staff;
                 this.success(staff);
