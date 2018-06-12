@@ -45,7 +45,7 @@ class ImportExportController extends Controller {
         const stream = await ctx.getFileStream();
 
         const fileName = encodeURIComponent(stream.filename);
-        const target = path.join(this.config.baseDir, 'app/public', fileName);
+        const target = path.join(this.config.baseDir, 'app/public/upload/tmp', fileName);
         const writeStream = fs.createWriteStream(target);
 
         try {
@@ -60,7 +60,7 @@ class ImportExportController extends Controller {
     async importFile(ctx) {
         const {fileType, fileName} = ctx.request.body;
         let result;
-        const obj = xlsx.parse(path.join(this.config.baseDir, 'app/public', fileName));//配置excel文件的路径
+        const obj = xlsx.parse(path.join(this.config.baseDir, 'app/public/upload/tmp', fileName));//配置excel文件的路径
         var excelData = obj[0].data;//excelObj是excel文件里第一个sheet文档的数据，obj[i].data表示excel文件第i+1个sheet文档的全部内容
         excelData.shift();
 
