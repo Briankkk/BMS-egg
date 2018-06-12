@@ -10,6 +10,13 @@ class CustomerService extends Service {
         return {total:total[0].cnt,list:customers};
     }
 
+    async exportFile(){
+        const client_global = this.app.mysql.get('db_global');
+        const helper = this.ctx.helper;
+        const customers = await client_global.query('select CUSTOMER_NAME,CUSTOMER_SHORT_NAME,CUSTOMER_CODE,LINKMAN,PHONE,ADDRESS from customer where CUST_ID=? '+helper.convertWhere()+ helper.convertOrder(),helper.convertValue());
+        return customers;
+    }
+
     async show() {
         const client_global = this.app.mysql.get('db_global');
         const customer = await client_global.get('customer',{CUSTOMER_ID:this.ctx.params.id});
