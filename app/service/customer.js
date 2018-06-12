@@ -29,6 +29,20 @@ class CustomerService extends Service {
         return result;
     }
 
+    async createBatch(customers) {
+
+        const result = await this.app.mysql.get('db_global').beginTransactionScope(async conn => {
+            for(let customer of customers){
+                await conn.insert('customer', {...customer, CUST_ID: this.ctx.session.staff.CUST_ID});
+            }
+            return { success: true };
+        }, this.ctx);
+
+        return result;
+    }
+
+
+
     async update(customer) {
         const client_global = this.app.mysql.get('db_global');
         const options = {

@@ -7,9 +7,8 @@ const awaitWriteStream = require('await-stream-ready').write;
 const sendToWormhole = require('stream-wormhole');
 const xlsx = require('node-xlsx');
 const transEXLData = require('../utils/exportUtils').transEXLData;
+const transObjData = require('../utils/exportUtils').transObjData;
 const getNameData = require('../utils/exportUtils').getNameData;
-
-
 
 
 class ImportExportController extends Controller {
@@ -42,15 +41,12 @@ class ImportExportController extends Controller {
     }
 
 
-    async importFile() {
-        const stream = await this.ctx.getFileStream();
+    async uploadFile(ctx) {
+        const stream = await ctx.getFileStream();
 
-        const filename = encodeURIComponent(stream.filename);
-        const target = path.join(this.config.baseDir, 'app/public', filename);
+        const fileName = encodeURIComponent(stream.filename);
+        const target = path.join(this.config.baseDir, 'app/public', fileName);
         const writeStream = fs.createWriteStream(target);
-
-        this.ctx.service.customer.upload(target);
-
 
         try {
             await awaitWriteStream(stream.pipe(writeStream));
@@ -58,19 +54,27 @@ class ImportExportController extends Controller {
             await sendToWormhole(stream);
             throw err;
         }
-        this.ctx.redirect('/public/' + filename);
+        ctx.body = fileName;
     }
 
-    async uploadFile(target) {
-        console.log(target)
-        const obj = xlsx.parse(target);//配置excel文件的路径
-        var excelObj = obj[0].data;//excelObj是excel文件里第一个sheet文档的数据，obj[i].data表示excel文件第i+1个sheet文档的全部内容
-        console.log(excelObj);
-        for (var i in excelObj) {
-            var value = excelObj[i];
-            for (var j in value) {
-                console.log(value[j]);
+    async importFile(ctx) {
+        const {fileType, fileName} = ctx.request.body;
+        let result;
+        const obj = xlsx.parse(path.join(this.config.baseDir, 'app/public', fileName));//配置excel文件的路径
+        var excelData = obj[0].data;//excelObj是excel文件里第一个sheet文档的数据，obj[i].data表示excel文件第i+1个sheet文档的全部内容
+        excelData.shift();
+
+        const insertData =transObjData(excelData,fileType);
+        try {
+            switch (fileType) {
+                case 'CUSTOMER':
+                    result = await ctx.service.customer.createBatch(insertData);
+                    break;
             }
+            this.success(result);
+        }catch(e){
+            ctx.logger.error(new Error(e));
+            this.fail("导入客户失败")
         }
     }
 
