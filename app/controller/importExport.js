@@ -9,6 +9,9 @@ const xlsx = require('node-xlsx');
 const transEXLData = require('../utils/exportUtils').transEXLData;
 const transObjData = require('../utils/exportUtils').transObjData;
 const getNameData = require('../utils/exportUtils').getNameData;
+const getDocDefinition = require('../utils/exportUtils').getDocDefinition;
+
+const PdfPrinter = require('pdfmake');
 
 
 class ImportExportController extends Controller {
@@ -35,10 +38,62 @@ class ImportExportController extends Controller {
         let xlsxContentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';  // For Excel2007 and above .xlsx files
 
         const xlsxFileName = nameData.fileName;
-        this.ctx.set('Content-Type', xlsxContentType);
-        this.ctx.set('Content-Disposition', `attachment; filename=${xlsxFileName}.xlsx`);
-        this.ctx.body = buffer;
+        ctx.set('Content-Type', xlsxContentType);
+        ctx.set('Content-Disposition', `attachment; filename=${xlsxFileName}.xlsx`);
+        ctx.body = buffer;
     }
+
+    async generatePDF(ctx) {
+        const fonts = {
+            msyh: {
+                normal: path.resolve(__dirname, '../fonts/msyh.ttf'),
+                bold: path.resolve(__dirname, '../fonts/msyh.ttf'),
+                italics: path.resolve(__dirname, '../fonts/msyh.ttf'),
+                bolditalics: path.resolve(__dirname, '../fonts/msyh.ttf')
+            }
+        };
+
+        const printer = new PdfPrinter(fonts);
+
+        const exportType = ctx.query.EXPORT_TYPE;
+        delete ctx.query.EXPORT_TYPE;
+
+
+        let docDefinition;
+        let nameData=getNameData(exportType);
+        const pdfFileName = nameData.fileName;
+        const docData={};
+
+        switch (exportType) {
+            case 'CUSTOMER':
+                docData.customerData = await ctx.service.customer.exportFile();
+                break;
+        }
+        docDefinition = getDocDefinition(exportType);
+
+        const pdfDoc = printer.createPdfKitDocument(docDefinition);
+
+
+        const target = path.join(this.config.baseDir, 'app/public/download/tmp', `${pdfFileName}.pdf`);
+
+        pdfDoc.pipe(fs.createWriteStream(target));
+        pdfDoc.end();
+
+        this.success(pdfFileName);
+    }
+
+
+
+    async printPDF(ctx) {
+        const pdfFileName = ctx.query.fileName;
+        const target = path.join(this.config.baseDir, 'app/public/download/tmp', `${pdfFileName}.pdf`);
+        ctx.set('Content-Type', 'application/pdf');
+        ctx.set('Content-Disposition', `attachment; filename=${pdfFileName}.pdf`);
+        const result = await fs.createReadStream(target);
+        ctx.body = result;
+    }
+
+
 
 
     async uploadFile(ctx) {

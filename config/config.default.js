@@ -71,7 +71,7 @@ module.exports = appInfo => {
         multipart: {
             fileExtensions: [ '.xlsx' ], // 增加对 .xlsx 扩展名的支持
         },
-        middleware: ['robot','gzip','pagination'],
+        middleware: ['robot','pagination'],
         gzip: {
             threshold: 1024, // 小于 1k 的响应体不压缩
         },
