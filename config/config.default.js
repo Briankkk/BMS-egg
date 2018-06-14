@@ -59,21 +59,40 @@ module.exports = appInfo => {
 
 
         },
+        session: {
+            key: 'EGG_SESS',
+            maxAge: 2 * 3600 * 1000, // 2小时
+            httpOnly: true,
+            encrypt: true,
+        },
         security: {
             csrf: {
                 enable: false,
-                queryName: '_csrf', // 通过 query 传递 CSRF token 的默认字段为 _csrf
-                bodyName: '_csrf', // 通过 body 传递 CSRF token 的默认字段为 _csrf
+                //queryName: '_csrf', // 通过 query 传递 CSRF token 的默认字段为 _csrf
+                //bodyName: '_csrf', // 通过 body 传递 CSRF token 的默认字段为 _csrf
                 headerName: 'x-csrf-token',// 通过 header 传递 CSRF token 的默认字段为 x-csrf-token
                 cookieName: 'csrfToken',// Cookie 中的字段名，默认为 csrfToken
             }
         },
         multipart: {
-            fileExtensions: [ '.xlsx' ], // 增加对 .xlsx 扩展名的支持
+            fileExtensions: ['.xlsx'], // 增加对 .xlsx 扩展名的支持
         },
-        middleware: ['robot','pagination'],
+        middleware: ['robot', 'gzip', 'pagination'],
         gzip: {
             threshold: 1024, // 小于 1k 的响应体不压缩
+            ignore(ctx) {
+                const urlArray = ['/printPDF'];
+                let flag = false;
+                if (ctx.request.method === 'GET') {
+                    _.forEach(urlArray, function (url) {
+                        if (ctx.request.url.split('?')[0] === url || ctx.request.url.split('?')[0].indexOf(url) !== -1) {
+                            flag = true;
+                            return false;
+                        }
+                    });
+                }
+                return flag;
+            }
         },
         robot: {
             ua: [

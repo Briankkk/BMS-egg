@@ -40,6 +40,8 @@ class HomeController extends Controller {
                 .digest('hex'));
             if (staff) {
                 ctx.session.staff=staff;
+                // 调用 rotateCsrfSecret 刷新用户的 CSRF token
+                ctx.rotateCsrfSecret();
                 this.success(staff);
             }
             else {

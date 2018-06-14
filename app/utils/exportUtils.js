@@ -74,11 +74,8 @@ function _getCustomerDocData(data) {
     };
     return docDefinition;
 }
-function wait2Min(){
 
-}
 exports.transEXLData = transEXLData;//转换成excel文件插件需要的数据格式
 exports.getNameData = getNameData;//获取文件名
 exports.transObjData = transObjData;//excel插件获取的数据转换成数据库需要的格式
 exports.getDocDefinition = getDocDefinition;//获取PDF内容
-exports.printPDFFile = wait2Min;
