@@ -13,6 +13,8 @@ module.exports = app => {
     router.resources('customer', '/customer', controller.customer);
     router.resources('staff', '/staff', controller.staff);
     router.resources('role', '/role', controller.role);
+    router.resources('supplier', '/supplier', controller.supplier);
+    router.get('/exportFile',controller.importExport.exportFile);
     router.post('/uploadFile', controller.importExport.uploadFile);
     router.post('/importFile',controller.importExport.importFile);
     router.get('/generatePDF',controller.importExport.generatePDF);

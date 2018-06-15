@@ -115,4 +115,39 @@ create table STAFF_ROLE
 );
 
 insert into STAFF_ROLE(STAFF_ROLE_CODE,STAFF_ROLE_NAME) values('admin','管理员');
-insert into STAFF_ROLE(STAFF_ROLE_CODE,STAFF_ROLE_NAME) values('user','普通用户');
+
+
+
+if exists(select 1 from sys.sysforeignkey where role='FK_SUPPLIER_REFERENCE_CUST') then
+    alter table SUPPLIER
+       delete foreign key FK_SUPPLIER_REFERENCE_CUST
+end if;
+
+drop table if exists SUPPLIER;
+
+/*==============================================================*/
+/* Table: SUPPLIER                                              */
+/*==============================================================*/
+create table SUPPLIER
+(
+   SUPPLIER_ID          int(10)                        not null auto_increment,
+   CUST_ID              int(10)                        null,
+   SUPPLIER_NAME        varchar(60)                    not null,
+   SUPPLIER_SHORT_NAME  varchar(60)                    not null,
+   SUPPLIER_CODE        varchar(60)                    not null,
+   LINKMAN             varchar(60)                    null,
+   PHONE                varchar(60)                    null,
+   ADDRESS              varchar(255)                   null,
+   FAX                  varchar(60)                    null,
+   EMAIL                varchar(60)                    null,
+   STATE                char(1)                        not null DEFAULT 'A',
+   CREATE_TIME          timestamp                      not null DEFAULT now(),
+   UPDATE_TIME          timestamp                      not null DEFAULT now(),
+   constraint PK_SUPPLIER primary key clustered (SUPPLIER_ID)
+);
+
+alter table SUPPLIER
+   add constraint FK_SUPPLIER_REFERENCE_CUST foreign key (CUST_ID)
+      references CUST (CUST_ID)
+      on update restrict
+      on delete restrict;

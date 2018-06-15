@@ -15,7 +15,7 @@ const PdfPrinter = require('pdfmake');
 
 
 class ImportExportController extends Controller {
-
+    //导出 /exportFile
     async exportFile(ctx) {
 
         const exportType = ctx.query.EXPORT_TYPE;
@@ -30,6 +30,10 @@ class ImportExportController extends Controller {
                 queryData = await ctx.service.customer.exportFile();
                 title=['客户名称','客户简称','客户编码','联系人','联系电话','联系地址'];
                 break;
+            case 'SUPPLIER':
+                queryData = await ctx.service.supplier.exportFile();
+                title=['供应商名称','供应商简称','供应商编码','联系人','联系电话','联系地址','传真','电子邮件'];
+                break;
         }
         sheetData =transEXLData(queryData);
         sheetData.unshift(title);
@@ -43,6 +47,7 @@ class ImportExportController extends Controller {
         ctx.body = buffer;
     }
 
+    // 生成PDF /generatePDF
     async generatePDF(ctx) {
         const fonts = {
             msyh: {
@@ -83,7 +88,7 @@ class ImportExportController extends Controller {
     }
 
 
-
+    //下载PDF /printPDF
     async printPDF(ctx) {
         const pdfFileName = ctx.query.fileName;
         const target = path.join(this.config.baseDir, 'app/public/download/tmp', `${pdfFileName}.pdf`);
@@ -95,7 +100,7 @@ class ImportExportController extends Controller {
 
 
 
-
+    //上传 /uploadFile
     async uploadFile(ctx) {
         const stream = await ctx.getFileStream();
 
@@ -112,6 +117,7 @@ class ImportExportController extends Controller {
         ctx.body = fileName;
     }
 
+    //导入 /importFile
     async importFile(ctx) {
         const {fileType, fileName} = ctx.request.body;
         let result;
@@ -125,11 +131,14 @@ class ImportExportController extends Controller {
                 case 'CUSTOMER':
                     result = await ctx.service.customer.createBatch(insertData);
                     break;
+                case 'SUPPLIER':
+                    result = await ctx.service.supplier.createBatch(insertData);
+                    break;
             }
             this.success(result);
         }catch(e){
             ctx.logger.error(new Error(e));
-            this.fail("导入客户失败")
+            this.fail("导入失败")
         }
     }
 

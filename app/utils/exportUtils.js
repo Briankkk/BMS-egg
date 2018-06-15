@@ -13,6 +13,9 @@ function transObjData(data, type) {
         case 'CUSTOMER':
             objData = _.map(data, _transCustomerData);
             break;
+        case 'SUPPLIER':
+            objData = _.map(data, _transSupplierData);
+            break;
     }
     return objData;
 }
@@ -40,6 +43,35 @@ function _transCustomerData(list) {
     return obj;
 }
 
+function _transSupplierData(list) {
+    const obj = {};
+    if (list[0]) {
+        obj.SUPPLIER_NAME = list[0];
+    }
+    if (list[1]) {
+        obj.SUPPLIER_SHORT_NAME = list[1];
+    }
+    if (list[2]) {
+        obj.SUPPLIER_CODE = list[2];
+    }
+    if (list[3]) {
+        obj.LINKMAN = list[3];
+    }
+    if (list[4]) {
+        obj.PHONE = list[4];
+    }
+    if (list[5]) {
+        obj.ADDRESS = list[5];
+    }
+    if (list[6]) {
+        obj.FAX = list[6];
+    }
+    if (list[7]) {
+        obj.EMAIL = list[7];
+    }
+    return obj;
+}
+
 function getNameData(type) {
     const nameData = {};
     switch (type) {
@@ -47,6 +79,11 @@ function getNameData(type) {
             nameData.fileName = 'Customer';
             nameData.sheetName = '客户';
             nameData.printName = 'Customer';
+            break;
+        case 'SUPPLIER':
+            nameData.fileName = 'Supplier';
+            nameData.sheetName = '供应商';
+            nameData.printName = 'Supplier';
             break;
     }
     return nameData;
