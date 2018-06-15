@@ -79,7 +79,7 @@ drop table if exists CUSTOMER;
 create table CUSTOMER
 (
    CUSTOMER_ID          int(10)                        not null auto_increment,
-   CUST_ID              int(10)                    not null,
+   CUST_ID              int(10)                        not null,
    CUSTOMER_NAME        varchar(60)                    not null,
    CUSTOMER_SHORT_NAME  varchar(60)                    not null,
    CUSTOMER_CODE        varchar(60)                    not null,
@@ -97,3 +97,22 @@ alter table CUSTOMER
       references CUST (CUST_ID)
       on update restrict
       on delete restrict;
+
+
+drop table if exists STAFF_ROLE;
+
+/*==============================================================*/
+/* Table: STAFF_ROLE                                            */
+/*==============================================================*/
+create table STAFF_ROLE
+(
+   STAFF_ROLE_CODE      varchar(60)                    not null,
+   STAFF_ROLE_NAME      varchar(60)                    not null,
+   STATE                char(1)                        not null DEFAULT 'A',
+   CREATE_TIME          timestamp                      not null DEFAULT now(),
+   UPDATE_TIME          timestamp                      not null DEFAULT now(),
+   constraint PK_STAFF_ROLE primary key clustered (STAFF_ROLE_CODE)
+);
+
+insert into STAFF_ROLE(STAFF_ROLE_CODE,STAFF_ROLE_NAME) values('admin','管理员');
+insert into STAFF_ROLE(STAFF_ROLE_CODE,STAFF_ROLE_NAME) values('user','普通用户');
