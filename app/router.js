@@ -11,6 +11,7 @@ module.exports = app => {
     router.get('/currentUser', controller.home.currentUser);
 
     router.resources('customer', '/customer', controller.customer);
+    router.resources('staff', '/staff', controller.staff);
     router.post('/uploadFile', controller.importExport.uploadFile);
     router.post('/importFile',controller.importExport.importFile);
     router.get('/generatePDF',controller.importExport.generatePDF);
