@@ -23,12 +23,12 @@ create table CUST
    constraint PK_CUST primary key clustered (CUST_ID)
 );
 
-insert into CUST(CUST_CODE,CUST_NAME) values('admin','dmin');
+--insert into CUST(CUST_CODE,CUST_NAME) values('admin','admin');
 
 
 
 
-if exists(select 1 from sys.sysforeignkey where role='FK_STAFF_REFERENCE_CUST') then
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_STAFF_REFERENCE_CUST') then
     alter table STAFF
        delete foreign key FK_STAFF_REFERENCE_CUST
 end if;
@@ -41,7 +41,7 @@ drop table if exists STAFF;
 create table STAFF
 (
    STAFF_ID             int(10)                        not null auto_increment,
-   CUST_ID              int(10)                        null,
+   CUST_ID              int(10)                        not null,
    STAFF_NAME           varchar(60)                    not null,
    STAFF_CODE           varchar(60)                    not null,
    PASSWORD             varchar(256)                   not null,
@@ -63,10 +63,10 @@ alter table STAFF
       on delete restrict;
 
 
-insert into STAFF(CUST_ID,STAFF_NAME,STAFF_CODE,PASSWORD,STAFF_ROLE)  values(1,'Admin','admin','09472b87a00588ce898737b10fe1d86fd415097c436cf691ea3db2d42460384c','0');
+--insert into STAFF(CUST_ID,STAFF_NAME,STAFF_CODE,PASSWORD,STAFF_ROLE)  values(1,'Admin','admin','09472b87a00588ce898737b10fe1d86fd415097c436cf691ea3db2d42460384c','0');
 
 
-if exists(select 1 from sys.sysforeignkey where role='FK_CUSTOMER_REFERENCE_CUST') then
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_CUSTOMER_REFERENCE_CUST') then
     alter table CUSTOMER
        delete foreign key FK_CUSTOMER_REFERENCE_CUST
 end if;
@@ -108,17 +108,18 @@ create table STAFF_ROLE
 (
    STAFF_ROLE_CODE      varchar(60)                    not null,
    STAFF_ROLE_NAME      varchar(60)                    not null,
+   CUST_ID              int(10)                        not null,
    STATE                char(1)                        not null DEFAULT 'A',
    CREATE_TIME          timestamp                      not null DEFAULT now(),
    UPDATE_TIME          timestamp                      not null DEFAULT now(),
    constraint PK_STAFF_ROLE primary key clustered (STAFF_ROLE_CODE)
 );
 
-insert into STAFF_ROLE(STAFF_ROLE_CODE,STAFF_ROLE_NAME) values('admin','管理员');
+--insert into STAFF_ROLE(STAFF_ROLE_CODE,STAFF_ROLE_NAME) values('admin','管理员');
 
 
 
-if exists(select 1 from sys.sysforeignkey where role='FK_SUPPLIER_REFERENCE_CUST') then
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_SUPPLIER_REFERENCE_CUST') then
     alter table SUPPLIER
        delete foreign key FK_SUPPLIER_REFERENCE_CUST
 end if;
@@ -131,7 +132,7 @@ drop table if exists SUPPLIER;
 create table SUPPLIER
 (
    SUPPLIER_ID          int(10)                        not null auto_increment,
-   CUST_ID              int(10)                        null,
+   CUST_ID              int(10)                        not null,
    SUPPLIER_NAME        varchar(60)                    not null,
    SUPPLIER_SHORT_NAME  varchar(60)                    not null,
    SUPPLIER_CODE        varchar(60)                    not null,
@@ -149,5 +150,172 @@ create table SUPPLIER
 alter table SUPPLIER
    add constraint FK_SUPPLIER_REFERENCE_CUST foreign key (CUST_ID)
       references CUST (CUST_ID)
+      on update restrict
+      on delete restrict;
+
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_MATER_TYPE_REFERENCE_CUST') then
+    alter table MATER_TYPE
+       delete foreign key FK_MATER_TYPE_REFERENCE_CUST
+end if;
+
+drop table if exists MATER_TYPE;
+
+/*==============================================================*/
+/* Table: MATER_TYPE                                            */
+/*==============================================================*/
+create table MATER_TYPE
+(
+   MATER_TYPE_ID        int(10)                        not null auto_increment,
+   CUST_ID              int(10)                        not null,
+   MATER_TYPE_NAME      varchar(60)                    not null,
+   PARENT_TYPE_ID       int(10)                        null,
+   STATE                char(1)                        not null DEFAULT 'A',
+   CREATE_TIME          timestamp                      not null DEFAULT now(),
+   UPDATE_TIME          timestamp                      not null DEFAULT now(),
+   constraint PK_MATER_TYPE primary key clustered (MATER_TYPE_ID)
+);
+
+alter table MATER_TYPE
+   add constraint FK_MATER_TYPE_REFERENCE_CUST foreign key (CUST_ID)
+      references CUST (CUST_ID)
+      on update restrict
+      on delete restrict;
+
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_MATER_REFERENCE_CUST') then
+    alter table MATER
+       delete foreign key FK_MATER_REFERENCE_CUST
+end if;
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_MATER_REFERENCE_MATER_TYPE') then
+    alter table MATER
+       delete foreign key FK_MATER_REFERENCE_MATER_TYPE
+end if;
+
+drop table if exists MATER;
+
+/*==============================================================*/
+/* Table: MATER                                                 */
+/*==============================================================*/
+create table MATER
+(
+   MATER_ID             int(10)                        not null auto_increment,
+   CUST_ID              int(10)                        not null,
+   MATER_TYPE_ID           int(10)                        null,
+   MATER_TYPE_NAME      varchar(60)                    not null,
+   MATER_CODE           varchar(60)                    not null,
+   MATER_NAME           varchar(60)                    not null,
+   MATER_UNIT           varchar(10)                    not null,
+   MATER_NUM            numeric(10)                    null DEFAULT 0,
+   MATER_REQ_NUM        numeric(10)                    null DEFAULT 0,
+   MATER_HINT_MAX       numeric(10)                    null DEFAULT 0,
+   MATER_HINT_MIN       numeric(10)                    null DEFAULT 0,
+   MATER_ATTR           varchar(255)                   null,
+   MATER_ATTR_EXTEND    varchar(255)                   null,
+   STATE                char(1)                        not null DEFAULT 'A',
+   CREATE_TIME          timestamp                      not null DEFAULT now(),
+   UPDATE_TIME          timestamp                      not null DEFAULT now(),
+   constraint PK_MATER primary key clustered (MATER_ID)
+);
+
+alter table MATER
+   add constraint FK_MATER_REFERENCE_CUST foreign key (CUST_ID)
+      references CUST (CUST_ID)
+      on update restrict
+      on delete restrict;
+
+alter table MATER
+   add constraint FK_MATER_REFERENCE_MATER_TYPE foreign key (MATER_TYPE_ID)
+      references MATER_TYPE (MATER_TYPE_ID)
+      on update restrict
+      on delete restrict;
+
+
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_PROD_TYPE_REFERENCE_CUST') then
+    alter table PROD_TYPE
+       delete foreign key FK_PROD_TYPE_REFERENCE_CUST
+end if;
+
+
+drop table if exists PROD_TYPE;
+
+/*==============================================================*/
+/* Table: PROD_TYPE                                            */
+/*==============================================================*/
+create table PROD_TYPE
+(
+   PROD_TYPE_ID        int(10)                        not null auto_increment,
+   CUST_ID              int(10)                        not null,
+   PROD_TYPE_NAME      varchar(60)                    not null,
+   PARENT_TYPE_ID       int(10)                        null,
+   STATE                char(1)                        not null DEFAULT 'A',
+   CREATE_TIME          timestamp                      not null DEFAULT now(),
+   UPDATE_TIME          timestamp                      not null DEFAULT now(),
+   constraint PK_PROD_TYPE primary key clustered (PROD_TYPE_ID)
+);
+
+alter table PROD_TYPE
+   add constraint FK_PROD_TYPE_REFERENCE_CUST foreign key (CUST_ID)
+      references CUST (CUST_ID)
+      on update restrict
+      on delete restrict;
+
+
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_PROD_REFERENCE_CUST') then
+    alter table PROD
+       delete foreign key FK_PROD_REFERENCE_CUST
+end if;
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_PROD_REFERENCE_CUSTOMER') then
+    alter table PROD
+       delete foreign key FK_PROD_REFERENCE_CUSTOMER
+end if;
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_PROD_REFERENCE_PROD_TYPE') then
+    alter table PROD
+       delete foreign key FK_PROD_REFERENCE_PROD_TYPE
+end if;
+
+drop table if exists PROD;
+
+/*==============================================================*/
+/* Table: PROD                                                  */
+/*==============================================================*/
+create table PROD
+(
+   PROD_ID              int(10)                        not null auto_increment,
+   CUST_ID              int(10)                        not null,
+   CUSTOMER_ID          int(10)                        null,
+   PROD_TYPE_ID         int(10)                        null,
+   PROD_TYPE_NAME      varchar(60)                    not null,
+   PROD_CODE            varchar(60)                    not null,
+   PROD_NAME            varchar(60)                    not null,
+   PROD_UNIT            varchar(10)                    not null,
+   PROD_NUM             numeric(10)                    null DEFAULT 0,
+   PROD_PIC             varchar(255)                   null,
+   STATE                char(1)                        not null DEFAULT 'A',
+   CREATE_TIME          timestamp                      not null DEFAULT now(),
+   UPDATE_TIME          timestamp                      not null DEFAULT now(),
+   constraint PK_PROD primary key clustered (PROD_ID)
+);
+
+alter table PROD
+   add constraint FK_PROD_REFERENCE_CUST foreign key (CUST_ID)
+      references CUST (CUST_ID)
+      on update restrict
+      on delete restrict;
+
+alter table PROD
+   add constraint FK_PROD_REFERENCE_CUSTOMER foreign key (CUSTOMER_ID)
+      references CUSTOMER (CUSTOMER_ID)
+      on update restrict
+      on delete restrict;
+
+alter table PROD
+   add constraint FK_PROD_REFERENCE_PROD_TYPE foreign key (PROD_TYPE_ID)
+      references PROD_TYPE (PROD_TYPE_ID)
       on update restrict
       on delete restrict;

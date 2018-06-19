@@ -38,11 +38,11 @@ class HomeController extends Controller {
             const staff = await ctx.service.home.login(userName,crypto.createHmac('sha256', config().keys)
                 .update(password)
                 .digest('hex'));
-            if (staff) {
-                ctx.session.staff=staff;
+            if (staff&&staff[0]) {
+                ctx.session.staff=staff[0];
                 // 调用 rotateCsrfSecret 刷新用户的 CSRF token
                 ctx.rotateCsrfSecret();
-                this.success(staff);
+                this.success(staff[0]);
             }
             else {
                 this.fail("登录失败,请检查用户名或者密码");

@@ -14,6 +14,8 @@ module.exports = app => {
     router.resources('staff', '/staff', controller.staff);
     router.resources('role', '/role', controller.role);
     router.resources('supplier', '/supplier', controller.supplier);
+    router.resources('mater', '/mater', controller.mater);
+    router.resources('materType', '/materType', controller.materType);
     router.get('/exportFile',controller.importExport.exportFile);
     router.post('/uploadFile', controller.importExport.uploadFile);
     router.post('/importFile',controller.importExport.importFile);
