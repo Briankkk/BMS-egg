@@ -20,11 +20,7 @@ class HomeController extends Controller {
     }
 
     async login(ctx) {
-
-        //ctx.logger.debug('debug info');
-        //ctx.logger.info('some request data: %j', this.ctx.request.body);
-        //ctx.logger.warn('WARNNING!!!!');
-        //console.log(ctx.session.staff)
+        ctx.logger.debug('begin to login');
         /*const loginRule={
             title: { type: 'string',required:false },
             content: { type: 'string',required:false },
@@ -33,6 +29,8 @@ class HomeController extends Controller {
         try {
             //this.ctx.validate(loginRule);
             const {userName, password} = ctx.request.body;
+
+            ctx.logger.info('userName and password', userName,password);
 
 
             const staff = await ctx.service.home.login(userName,crypto.createHmac('sha256', config().keys)

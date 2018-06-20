@@ -33,9 +33,9 @@ module.exports = appInfo => {
                     // 用户名
                     user: 'root',
                     // 密码
-                    password: 'tianyaIBICF9',
+                    password: '1234567890',
                     // 数据库名
-                    database: 'bms',
+                    database: 'BMS',
                 },
                 db_CZHS: {
                     // host
@@ -45,7 +45,7 @@ module.exports = appInfo => {
                     // 用户名
                     user: 'root',
                     // 密码
-                    password: 'tianyaIBICF9',
+                    password: '1234567890',
                     // 数据库名
                     database: 'BMS_CZHS',
                 },
@@ -77,6 +77,9 @@ module.exports = appInfo => {
         multipart: {
             fileExtensions: ['.xlsx'], // 增加对 .xlsx 扩展名的支持
         },
+        logger: {
+            level: 'INFO',
+        },
         middleware: ['robot', 'gzip', 'pagination'],
         gzip: {
             threshold: 1024, // 小于 1k 的响应体不压缩
@@ -101,7 +104,7 @@ module.exports = appInfo => {
         },
         pagination: {
             match(ctx) {
-                const urlArray = ['/customer','/cust','/supplier','/staff','/mater','/prod'];
+                const urlArray = ['/customer', '/cust', '/supplier', '/staff', '/mater', '/prod'];
                 let flag = false;
                 if (ctx.request.method === 'GET') {
                     _.forEach(urlArray, function (url) {

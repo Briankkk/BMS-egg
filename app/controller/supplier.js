@@ -19,7 +19,7 @@ class SupplierController extends Controller {
     async show(ctx) {
         try {
             const supplier = await ctx.service.supplier.show();
-            this.success(customer);
+            this.success(supplier);
         }
         catch (e) {
             ctx.logger.error(new Error(e));
