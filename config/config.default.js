@@ -37,7 +37,7 @@ module.exports = appInfo => {
                     // 数据库名
                     database: 'bms',
                 },
-                db2: {
+                db_CZHS: {
                     // host
                     host: '127.0.0.1',
                     // 端口号
@@ -47,7 +47,7 @@ module.exports = appInfo => {
                     // 密码
                     password: 'tianyaIBICF9',
                     // 数据库名
-                    database: 'bms',
+                    database: 'BMS_CZHS',
                 },
                 // ...
             },
@@ -101,7 +101,7 @@ module.exports = appInfo => {
         },
         pagination: {
             match(ctx) {
-                const urlArray = ['/customer','/supplier','/staff','/mater','/prod'];
+                const urlArray = ['/customer','/cust','/supplier','/staff','/mater','/prod'];
                 let flag = false;
                 if (ctx.request.method === 'GET') {
                     _.forEach(urlArray, function (url) {

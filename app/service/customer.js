@@ -2,36 +2,44 @@ const Service = require('egg').Service;
 
 class CustomerService extends Service {
     async index() {
-        const client_global = this.app.mysql.get('db_global');
         const helper = this.ctx.helper;
-        const total = await client_global.query('select count(1) cnt from customer where CUST_ID=?'+helper.convertWhere(),helper.convertValue());
-        const customers = await client_global.query('select * from customer where CUST_ID=? '+helper.convertWhere()+ helper.convertOrder()+helper.convertLimit(),helper.convertValue());
+        const client = helper.getClient();
+
+        const total = await client.query('select count(1) cnt from customer where CUST_ID=?'+helper.convertWhere(),helper.convertValue());
+        const customers = await client.query('select * from customer where CUST_ID=? '+helper.convertWhere()+ helper.convertOrder()+helper.convertLimit(),helper.convertValue());
 
         return {total:total[0].cnt,list:customers};
     }
 
     async exportFile(){
-        const client_global = this.app.mysql.get('db_global');
+
         const helper = this.ctx.helper;
-        const customers = await client_global.query('select CUSTOMER_NAME,CUSTOMER_SHORT_NAME,CUSTOMER_CODE,LINKMAN,PHONE,ADDRESS from customer where CUST_ID=? '+helper.convertWhere()+ helper.convertOrder(),helper.convertValue());
+        const client = helper.getClient();
+
+        const customers = await client.query('select CUSTOMER_NAME,CUSTOMER_SHORT_NAME,CUSTOMER_CODE,LINKMAN,PHONE,ADDRESS from customer where CUST_ID=? '+helper.convertWhere()+ helper.convertOrder(),helper.convertValue());
         return customers;
     }
 
     async show() {
-        const client_global = this.app.mysql.get('db_global');
-        const customer = await client_global.get('customer',{CUSTOMER_ID:this.ctx.params.id});
+        const helper = this.ctx.helper;
+        const client = helper.getClient();
+
+        const customer = await client.get('customer',{CUSTOMER_ID:this.ctx.params.id});
         return customer;
     }
 
     async create(customer) {
-        const client_global = this.app.mysql.get('db_global');
-        const result = await client_global.insert('customer',{...customer,CUST_ID:this.ctx.session.staff.CUST_ID});
+        const helper = this.ctx.helper;
+        const client = helper.getClient();
+        const result = await client.insert('customer',{...customer,CUST_ID:this.ctx.session.staff.CUST_ID});
         return result;
     }
 
     async createBatch(customers) {
+        const helper = this.ctx.helper;
+        const client = helper.getClient();
 
-        const result = await this.app.mysql.get('db_global').beginTransactionScope(async conn => {
+        const result = await client.beginTransactionScope(async conn => {
             for(let customer of customers){
                 await conn.insert('customer', {...customer, CUST_ID: this.ctx.session.staff.CUST_ID});
             }
@@ -44,19 +52,23 @@ class CustomerService extends Service {
 
 
     async update(customer) {
-        const client_global = this.app.mysql.get('db_global');
+        const helper = this.ctx.helper;
+        const client = helper.getClient();
+
         const options = {
             where: {
                 CUSTOMER_ID: this.ctx.params.id
             }
         };
-        const result = await client_global.update('customer',{...customer,UPDATE_TIME:client_global.literals.now},options);
+        const result = await client.update('customer',{...customer,UPDATE_TIME:client.literals.now},options);
         return result;
     }
 
     async destroy() {
-        const client_global = this.app.mysql.get('db_global');
-        await client_global.delete('customer',{CUSTOMER_ID: this.ctx.params.id});
+        const helper = this.ctx.helper;
+        const client = helper.getClient();
+
+        await client.delete('customer',{CUSTOMER_ID: this.ctx.params.id});
     }
 }
 

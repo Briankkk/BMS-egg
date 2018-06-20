@@ -10,6 +10,7 @@ module.exports = app => {
     router.post('/logout', controller.home.logout);
     router.get('/currentUser', controller.home.currentUser);
 
+    router.resources('cust', '/cust', controller.cust);
     router.resources('customer', '/customer', controller.customer);
     router.resources('staff', '/staff', controller.staff);
     router.resources('role', '/role', controller.role);

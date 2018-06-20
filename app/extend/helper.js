@@ -1,6 +1,10 @@
 const _ = require('lodash');
 
 module.exports = {
+
+    getClient(){
+        return this.app.mysql.get('db_'+this.ctx.session.staff.CUST_CODE);
+    },
     convertWhere(){
         let sqlWhere='';
         for (let key in this.ctx.query) {

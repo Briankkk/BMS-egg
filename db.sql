@@ -63,7 +63,7 @@ alter table STAFF
       on delete restrict;
 
 
---insert into STAFF(CUST_ID,STAFF_NAME,STAFF_CODE,PASSWORD,STAFF_ROLE)  values(1,'Admin','admin','09472b87a00588ce898737b10fe1d86fd415097c436cf691ea3db2d42460384c','0');
+--insert into STAFF(CUST_ID,STAFF_NAME,STAFF_CODE,PASSWORD,STAFF_ROLE)  values(1,'Admin','admin','09472b87a00588ce898737b10fe1d86fd415097c436cf691ea3db2d42460384c','super_admin');
 
 
 if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_CUSTOMER_REFERENCE_CUST') then
