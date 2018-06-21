@@ -2,10 +2,10 @@ const Service = require('egg').Service;
 
 class HandlerLogService extends Service {
     async index() {
+        const helper = this.ctx.helper;
         const client_global = this.app.mysql.get('db_global');
-        const total = await client_global.query(`select count(1) cnt from handler_log`);
-        const logs = await client_global.query(`select * from handler_log`);
-
+        const total = await client_global.query(`select count(1) cnt from handler_log where 1=1 `+helper.convertWhere(),helper.convertValueWithOutCust());
+        const logs = await client_global.query(`select * from handler_log where 1=1 `+helper.convertWhere()+ helper.convertOrder()+helper.convertLimit(),helper.convertValueWithOutCust());
         return {total: total[0].cnt, list: logs};
     }
 

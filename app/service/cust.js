@@ -2,10 +2,10 @@ const Service = require('egg').Service;
 
 class CustomerService extends Service {
     async index() {
+        const helper = this.ctx.helper;
         const client_global = this.app.mysql.get('db_global');
         const total = await client_global.query(`select count(1) cnt from cust where state='A'`);
-        const custs = await client_global.query(`select * from cust where state='A'`);
-
+        const custs = await client_global.query(`select * from cust where state='A'`+ helper.convertOrder()+helper.convertLimit());
         return {total: total[0].cnt, list: custs};
     }
 
