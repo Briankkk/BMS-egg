@@ -66,6 +66,52 @@ alter table STAFF
 --insert into STAFF(CUST_ID,STAFF_NAME,STAFF_CODE,PASSWORD,STAFF_ROLE)  values(1,'Admin','admin','09472b87a00588ce898737b10fe1d86fd415097c436cf691ea3db2d42460384c','super_admin');
 
 
+
+
+
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_AUTH_REQ_REFERENCE_CUST') then
+    alter table AUTH_REQ
+       delete foreign key FK_AUTH_REQ_REFERENCE_CUST
+end if;
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_AUTH_REQ_REFERENCE_STAFF') then
+    alter table AUTH_REQ
+       delete foreign key FK_AUTH_REQ_REFERENCE_STAFF
+end if;
+
+drop table if exists AUTH_REQ;
+
+/*==============================================================*/
+/* Table: AUTH_REQ                                                 */
+/*==============================================================*/
+create table AUTH_REQ
+(
+   AUTH_REQ_ID          int(10)                        not null auto_increment,
+   CUST_ID              int(10)                        not null,
+   STAFF_ID             int(10)                        not null,
+   AUTH_CODE_C          varchar(256)                   not null,
+   AUTH_CODE_S          varchar(256)                   not null,
+   STATE                char(1)                        not null DEFAULT 'A',
+   CREATE_TIME          timestamp                      not null DEFAULT now(),
+   UPDATE_TIME          timestamp                      not null DEFAULT now(),
+   constraint PK_AUTH_REQ primary key clustered (AUTH_REQ_ID)
+);
+
+alter table AUTH_REQ
+   add constraint FK_AUTH_REQ_REFERENCE_CUST foreign key (CUST_ID)
+      references CUST (CUST_ID)
+      on update restrict
+      on delete restrict;
+
+alter table AUTH_REQ
+   add constraint FK_AUTH_REQ_REFERENCE_STAFF foreign key (STAFF_ID)
+      references STAFF (STAFF_ID)
+      on update restrict
+      on delete restrict;
+
+
+
 if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_CUSTOMER_REFERENCE_CUST') then
     alter table CUSTOMER
        delete foreign key FK_CUSTOMER_REFERENCE_CUST

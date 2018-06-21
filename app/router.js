@@ -10,9 +10,13 @@ module.exports = app => {
     router.post('/logout', controller.home.logout);
     router.get('/currentUser', controller.home.currentUser);
 
+    router.put('/authRequest/approve/:id', controller.authRequest.approve);
+    router.put('/authRequest/reject/:id', controller.authRequest.reject);
+
     router.resources('cust', '/cust', controller.cust);
     router.resources('customer', '/customer', controller.customer);
     router.resources('staff', '/staff', controller.staff);
+    router.resources('authRequest', '/authRequest', controller.authRequest);
     router.resources('role', '/role', controller.role);
     router.resources('supplier', '/supplier', controller.supplier);
     router.resources('mater', '/mater', controller.mater);

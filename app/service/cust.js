@@ -56,8 +56,6 @@ class CustomerService extends Service {
             await connGlobal.rollback();
             throw err;
         }
-
-
     }
 
 

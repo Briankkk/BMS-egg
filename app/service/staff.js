@@ -33,6 +33,17 @@ class StaffService extends Service {
         return result;
     }
 
+    async updateAuthPass(staffId){
+        const client_global = this.app.mysql.get('db_global');
+        const options = {
+            where: {
+                STAFF_ID: staffId
+            }
+        };
+        const result = await client_global.update('staff',{IS_AUTH_PASS:'1',UPDATE_TIME:client_global.literals.now},options);
+        return result;
+    }
+
     async destroy() {
         const client_global = this.app.mysql.get('db_global');
         await client_global.delete('staff',{STAFF_ID: this.ctx.params.id});
