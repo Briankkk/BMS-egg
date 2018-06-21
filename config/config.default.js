@@ -80,7 +80,7 @@ module.exports = appInfo => {
         logger: {
             level: 'INFO',
         },
-        middleware: ['robot', 'gzip', 'pagination'],
+        middleware: ['robot', 'gzip', 'pagination','handlerlog'],
         gzip: {
             threshold: 1024, // 小于 1k 的响应体不压缩
             ignore(ctx) {
@@ -117,6 +117,15 @@ module.exports = appInfo => {
                 return flag;
             }
         },
+        handlerlog:{
+            match(ctx) {
+                if (ctx.request.method !== 'GET') {
+                    return true
+                }
+                return false;
+            }
+
+        }
 
 
     };

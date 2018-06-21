@@ -365,3 +365,26 @@ alter table PROD
       references PROD_TYPE (PROD_TYPE_ID)
       on update restrict
       on delete restrict;
+
+
+
+
+drop table if exists HANDLER_LOG;
+
+/*==============================================================*/
+/* Table: HANDLER_LOG                                           */
+/*==============================================================*/
+create table HANDLER_LOG
+(
+   HANDLER_LOG_ID       int(10)                        not null auto_increment,
+   CUST_NAME            varchar(60)                        null,
+   CUST_CODE            varchar(60)                    null,
+   STAFF_NAME           varchar(60)                    null,
+   STAFF_CODE           varchar(60)                        null,
+   HANDLER_TYPE         varchar(60)                    not null,
+   HANDLER_NAME         varchar(60)                    not null,
+   HANDLER_HEADER       varchar(4000)                       null,
+   HANDLER_BODY         varchar(4000)                       null,
+   CREATE_TIME          timestamp                      not null DEFAULT now(),
+   constraint PK_HANDLER_LOG primary key clustered (HANDLER_LOG_ID)
+);
