@@ -43,7 +43,7 @@ create table STAFF
    STAFF_ID             int(10)                        not null auto_increment,
    CUST_ID              int(10)                        not null,
    STAFF_NAME           varchar(60)                    not null,
-   STAFF_CODE           varchar(60)                    not null,
+   STAFF_CODE           varchar(60)                    not null unique,
    PASSWORD             varchar(256)                   not null,
    STAFF_ROLE           varchar(60)                    not null DEFAULT 'user',
    AUTH_CODE_C          varchar(60)                    null,

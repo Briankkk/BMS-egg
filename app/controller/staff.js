@@ -32,9 +32,16 @@ class StaffController extends Controller {
     async create(ctx) {
         try {
             const staffAdd = ctx.request.body;
+
+            const _staff = await ctx.service.staff.showByCode(staffAdd.STAFF_CODE);
+            if(_staff){
+                this.fail("员工账号已经存在");
+                return;
+            }
             staffAdd.PASSWORD = crypto.createHmac('sha256', config().keys)
                 .update(staffAdd.PASSWORD)
                 .digest('hex');
+
             const staff = await ctx.service.staff.create(staffAdd);
             this.success(staff);
         }

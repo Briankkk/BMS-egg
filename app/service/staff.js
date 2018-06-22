@@ -16,6 +16,12 @@ class StaffService extends Service {
         return staff;
     }
 
+    async showByCode(staffCode) {
+        const client_global = this.app.mysql.get('db_global');
+        const staff = await client_global.get('staff',{STAFF_CODE:staffCode});
+        return staff;
+    }
+
     async create(staff) {
         const client_global = this.app.mysql.get('db_global');
         const result = await client_global.insert('staff',{...staff,CUST_ID:this.ctx.session.staff.CUST_ID});
