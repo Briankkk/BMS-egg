@@ -1,4 +1,5 @@
 const Service = require('egg').Service;
+const transList2Map = require('../utils/collectionUtils').transList2Map;
 
 class MaterService extends Service {
     async index() {
@@ -14,7 +15,7 @@ class MaterService extends Service {
     async exportFile(){
         const helper = this.ctx.helper;
         const client = helper.getClient();
-        const maters = await client.query('select MATER_CODE,MATER_NAME,MATER_TYPE,MATER_UNIT,MATER_NUM,MATER_REQ_NUM,MATER_HINT_MIN,MATER_ATTR,MATER_ATTR_EXTEND from mater where CUST_ID=? '+helper.convertWhere()+ helper.convertOrder(),helper.convertValue());
+        const maters = await client.query('select MATER_NAME,MATER_CODE,MATER_TYPE_NAME,MATER_UNIT,MATER_NUM,MATER_HINT_MIN from mater where CUST_ID=? '+helper.convertWhere()+ helper.convertOrder(),helper.convertValue());
         return maters;
     }
 
@@ -36,9 +37,11 @@ class MaterService extends Service {
 
         const helper = this.ctx.helper;
         const client = helper.getClient();
+        const materTypes = await client.query(`select MATER_TYPE_ID,MATER_TYPE_NAME from mater_type where state='A' and PARENT_TYPE_ID is not null and cust_id=?`,[this.ctx.session.staff.CUST_ID]);
+        const map = transList2Map(materTypes,'MATER_TYPE_ID','MATER_TYPE_NAME');
         const result = await client.beginTransactionScope(async conn => {
             for(let mater of maters){
-                await conn.insert('mater', {...mater, CUST_ID: this.ctx.session.staff.CUST_ID});
+                await conn.insert('mater', {...mater, MATER_TYPE_ID:map.get(mater.MATER_TYPE_NAME),CUST_ID: this.ctx.session.staff.CUST_ID});
             }
             return { success: true };
         }, this.ctx);

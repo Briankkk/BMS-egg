@@ -7,6 +7,29 @@ function transEXLData(data) {
     return _.map(data, obj2List);
 }
 
+
+function getNameData(type) {
+    const nameData = {};
+    switch (type) {
+        case 'CUSTOMER':
+            nameData.fileName = 'Customer';
+            nameData.sheetName = '客户';
+            nameData.printName = 'Customer';
+            break;
+        case 'SUPPLIER':
+            nameData.fileName = 'Supplier';
+            nameData.sheetName = '供应商';
+            nameData.printName = 'Supplier';
+            break;
+        case 'MATER':
+            nameData.fileName = 'ater';
+            nameData.sheetName = '原料';
+            nameData.printName = 'Mater';
+            break;
+    }
+    return nameData;
+}
+
 function transObjData(data, type) {
     let objData = {};
     switch (type) {
@@ -15,6 +38,9 @@ function transObjData(data, type) {
             break;
         case 'SUPPLIER':
             objData = _.map(data, _transSupplierData);
+            break;
+        case 'MATER':
+            objData = _.map(data, _transMaterData);
             break;
     }
     return objData;
@@ -72,22 +98,30 @@ function _transSupplierData(list) {
     return obj;
 }
 
-function getNameData(type) {
-    const nameData = {};
-    switch (type) {
-        case 'CUSTOMER':
-            nameData.fileName = 'Customer';
-            nameData.sheetName = '客户';
-            nameData.printName = 'Customer';
-            break;
-        case 'SUPPLIER':
-            nameData.fileName = 'Supplier';
-            nameData.sheetName = '供应商';
-            nameData.printName = 'Supplier';
-            break;
+function _transMaterData(list) {
+    const obj = {};
+    if (list[0]) {
+        obj.MATER_NAME = list[0];
     }
-    return nameData;
+    if (list[1]) {
+        obj.MATER_CODE = list[1];
+    }
+    if (list[2]) {
+        obj.MATER_TYPE_NAME = list[2];
+    }
+    if (list[3]) {
+        obj.MATER_UNIT = list[3];
+    }
+    if (list[4]) {
+        obj.MATER_NUM = list[4];
+    }
+    if (list[5]) {
+        obj.MATER_HINT_MIN = list[5];
+    }
+    return obj;
 }
+
+
 
 function getDocDefinition(type,data) {
     let objData = {};

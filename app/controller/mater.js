@@ -50,7 +50,7 @@ class MaterController extends Controller {
     }
 
     //删除/mater/:id DELETE
-    async mater(ctx) {
+    async destroy(ctx) {
         try {
             await ctx.service.mater.destroy();
             this.success({});

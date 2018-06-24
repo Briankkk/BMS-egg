@@ -35,6 +35,10 @@ class ImportExportController extends Controller {
                     queryData = await ctx.service.supplier.exportFile();
                     title = ['供应商名称', '供应商简称', '供应商编码', '联系人', '联系电话', '联系地址', '传真', '电子邮件'];
                     break;
+                case 'MATER':
+                    queryData = await ctx.service.mater.exportFile();
+                    title = ['原料名称', '原料型号', '原料类型', '原料单位', '原料数量', '原料提醒量'];
+                    break;
             }
             sheetData = transEXLData(queryData);
             sheetData.unshift(title);
@@ -146,6 +150,7 @@ class ImportExportController extends Controller {
             ctx.logger.info('fileType and fileName', fileType,fileName);
             let result;
             const obj = xlsx.parse(path.join(this.config.baseDir, 'app/public/upload/tmp', fileName));//配置excel文件的路径
+            console.log(obj);
             var excelData = obj[0].data;//excelObj是excel文件里第一个sheet文档的数据，obj[i].data表示excel文件第i+1个sheet文档的全部内容
             excelData.shift();
 
@@ -157,6 +162,9 @@ class ImportExportController extends Controller {
                     break;
                 case 'SUPPLIER':
                     result = await ctx.service.supplier.createBatch(insertData);
+                    break;
+                case 'MATER':
+                    result = await ctx.service.mater.createBatch(insertData);
                     break;
             }
             this.success(result);

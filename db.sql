@@ -248,8 +248,8 @@ create table MATER
 (
    MATER_ID             int(10)                        not null auto_increment,
    CUST_ID              int(10)                        not null,
-   MATER_TYPE_ID           int(10)                        null,
-   MATER_TYPE_NAME      varchar(60)                    not null,
+   MATER_TYPE_ID           int(10)                     null,
+   MATER_TYPE_NAME      varchar(60)                    null,
    MATER_CODE           varchar(60)                    not null,
    MATER_NAME           varchar(60)                    not null,
    MATER_UNIT           varchar(10)                    not null,
@@ -335,8 +335,9 @@ create table PROD
    PROD_ID              int(10)                        not null auto_increment,
    CUST_ID              int(10)                        not null,
    CUSTOMER_ID          int(10)                        null,
+   CUSTOMER_NAME        varchar(60)                       null,
    PROD_TYPE_ID         int(10)                        null,
-   PROD_TYPE_NAME      varchar(60)                    not null,
+   PROD_TYPE_NAME      varchar(60)                     null,
    PROD_CODE            varchar(60)                    not null,
    PROD_NAME            varchar(60)                    not null,
    PROD_UNIT            varchar(10)                    not null,
@@ -388,3 +389,11 @@ create table HANDLER_LOG
    CREATE_TIME          timestamp                      not null DEFAULT now(),
    constraint PK_HANDLER_LOG primary key clustered (HANDLER_LOG_ID)
 );
+
+
+/*==============================================================*/
+/* prod 冗余prodType                                             */
+/* mater 冗余materType                                           */
+/* prod 冗余customerName                                         */
+/*==============================================================*/
+

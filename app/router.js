@@ -26,4 +26,6 @@ module.exports = app => {
     router.resources('supplier', '/supplier', controller.supplier);
     router.resources('mater', '/mater', controller.mater);
     router.resources('materType', '/materType', controller.materType);
+    router.resources('prod', '/prod', controller.prod);
+    router.resources('prodType', '/prodType', controller.prodType);
 };
