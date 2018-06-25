@@ -21,11 +21,11 @@ module.exports = {
                         sqlWhere += ' and ' + _key + ' <=?';
                     }
                 } else {
-                    if (typeof(value) === 'string') {
+                    //if (typeof(value) === 'string') {
                         sqlWhere += ' and ' + key + ' like?';
-                    } else {
-                        sqlWhere += ' and ' + key + ' =?';
-                    }
+                    //} else {
+                    //    sqlWhere += ' and ' + key + ' =?';
+                    //}
                 }
             }
 
@@ -40,11 +40,11 @@ module.exports = {
                 if (key.indexOf('_TIME_') > -1) {
                     sqlValue.push(value);
                 } else {
-                    if (typeof(value) === 'string') {
+                    //if (typeof(value) === 'string') {
                         sqlValue.push('%' + value + '%');
-                    } else {
-                        sqlValue.push(value);
-                    }
+                    //} else {
+                    //    sqlValue.push(value);
+                    //}
                 }
             }
 
@@ -60,11 +60,11 @@ module.exports = {
                 if (key.indexOf('_TIME_') > -1) {
                     sqlValue.push(value);
                 } else {
-                    if (typeof(value) === 'string') {
+                    //if (typeof(value) === 'string') {
                         sqlValue.push('%' + value + '%');
-                    } else {
-                        sqlValue.push(value);
-                    }
+                    //} else {
+                    //    sqlValue.push(value);
+                    //}
                 }
             }
         }

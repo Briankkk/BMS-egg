@@ -11,6 +11,16 @@ class CustomerService extends Service {
         return {total: total[0].cnt, list: customers};
     }
 
+    async indexNoPage() {
+        const helper = this.ctx.helper;
+        const client = helper.getClient();
+
+
+        const customers = await client.query('select * from customer where CUST_ID=?', helper.convertValue());
+
+        return customers;
+    }
+
     async exportFile() {
 
         const helper = this.ctx.helper;

@@ -39,6 +39,10 @@ class ImportExportController extends Controller {
                     queryData = await ctx.service.mater.exportFile();
                     title = ['原料名称', '原料型号', '原料类型', '原料单位', '原料数量', '原料提醒量'];
                     break;
+                case 'PROD':
+                    queryData = await ctx.service.prod.exportFile();
+                    title = ['产品名称', '产品型号', '产品类型', '客户名称','产品单位', '产品数量'];
+                    break;
             }
             sheetData = transEXLData(queryData);
             sheetData.unshift(title);
@@ -165,6 +169,9 @@ class ImportExportController extends Controller {
                     break;
                 case 'MATER':
                     result = await ctx.service.mater.createBatch(insertData);
+                    break;
+                case 'PROD':
+                    result = await ctx.service.prod.createBatch(insertData);
                     break;
             }
             this.success(result);

@@ -22,9 +22,14 @@ function getNameData(type) {
             nameData.printName = 'Supplier';
             break;
         case 'MATER':
-            nameData.fileName = 'ater';
+            nameData.fileName = 'Mater';
             nameData.sheetName = '原料';
             nameData.printName = 'Mater';
+            break;
+        case 'PROD':
+            nameData.fileName = 'Prod';
+            nameData.sheetName = '产品';
+            nameData.printName = 'Prod';
             break;
     }
     return nameData;
@@ -41,6 +46,9 @@ function transObjData(data, type) {
             break;
         case 'MATER':
             objData = _.map(data, _transMaterData);
+            break;
+        case 'PROD':
+            objData = _.map(data, _transProdData);
             break;
     }
     return objData;
@@ -117,6 +125,29 @@ function _transMaterData(list) {
     }
     if (list[5]) {
         obj.MATER_HINT_MIN = list[5];
+    }
+    return obj;
+}
+
+function _transProdData(list) {
+    const obj = {};
+    if (list[0]) {
+        obj.PROD_NAME = list[0];
+    }
+    if (list[1]) {
+        obj.PROD_CODE = list[1];
+    }
+    if (list[2]) {
+        obj.PROD_TYPE_NAME = list[2];
+    }
+    if (list[3]) {
+        obj.CUSTOMER_NAME = list[3];
+    }
+    if (list[4]) {
+        obj.PROD_UNIT = list[4];
+    }
+    if (list[5]) {
+        obj.PROD_NUM = list[5];
     }
     return obj;
 }

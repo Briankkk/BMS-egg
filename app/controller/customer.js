@@ -15,6 +15,19 @@ class CustomerController extends Controller {
         }
 
     }
+
+    //查询/customerAll GET
+    async indexNoPage(ctx) {
+        try {
+            const customers = await ctx.service.customer.indexNoPage();
+            this.success(customers);
+        }
+        catch (e) {
+            ctx.logger.error(new Error(e));
+            this.fail("查询客户失败")
+        }
+
+    }
     //查询单个/customer/:id GET
     async show(ctx) {
         try {
