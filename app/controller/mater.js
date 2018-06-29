@@ -15,6 +15,21 @@ class MaterController extends Controller {
         }
 
     }
+
+    //查询/materAll GET
+    async indexNoPage(ctx) {
+        try {
+            const maters = await ctx.service.mater.indexNoPage();
+            this.success(maters);
+        }
+        catch (e) {
+            ctx.logger.error(new Error(e));
+            this.fail("查询原料失败")
+        }
+
+    }
+
+
     //查询单个/mater/:id GET
     async show(ctx) {
         try {

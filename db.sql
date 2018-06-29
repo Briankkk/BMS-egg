@@ -391,6 +391,97 @@ create table HANDLER_LOG
 );
 
 
+
+
+
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_PURCHASE_REFERENCE_SUPPLIER') then
+    alter table PURCHASE
+       drop foreign key FK_PURCHASE_REFERENCE_SUPPLIER
+end if;
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_PURCHASE_REFERENCE_CUST') then
+    alter table PURCHASE
+       drop foreign key FK_PURCHASE_REFERENCE_CUST
+end if;
+
+drop table if exists PURCHASE;
+
+/*==============================================================*/
+/* Table: PURCHASE                                              */
+/*==============================================================*/
+create table PURCHASE
+(
+   PURCHASE_ID          int(10)                    not null auto_increment,
+   SUPPLIER_ID          int(10)                    not null,
+   CUST_ID              int(10)                not null,
+   PURCHASE_CODE        varchar(60)                not null,
+   PHONE                varchar(60)                    null,
+   REMARK               varchar(255)                   null,
+   DELIVER_DATE         timestamp                  not null,
+   STATE                char(1)                          not null DEFAULT 'A',
+   CREATE_TIME            timestamp                      not null DEFAULT now(),
+   UPDATE_TIME            timestamp                      not null DEFAULT now(),
+   constraint PK_PURCHASE primary key clustered (PURCHASE_ID)
+);
+
+
+alter table PURCHASE
+   add constraint FK_PURCHASE_REFERENCE_SUPPLIER foreign key (SUPPLIER_ID)
+      references SUPPLIER (SUPPLIER_ID)
+      on update restrict
+      on delete restrict;
+
+alter table PURCHASE
+   add constraint FK_PURCHASE_REFERENCE_CUST foreign key (CUST_ID)
+      references CUST (CUST_ID)
+      on update restrict
+      on delete restrict;
+
+
+
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_PURCHASE_REFERENCE_PURCHASE') then
+    alter table PURCHASE_MATER
+       drop foreign key FK_PURCHASE_REFERENCE_PURCHASE
+end if;
+
+if exists(select 1 from information_schema.KEY_COLUMN_USAGE where CONSTRAINT_NAME='FK_PURCHASE_REFERENCE_MATER') then
+    alter table PURCHASE_MATER
+       drop foreign key FK_PURCHASE_REFERENCE_MATER
+end if;
+
+drop table if exists PURCHASE_MATER;
+
+/*==============================================================*/
+/* Table: PURCHASE_MATER                                        */
+/*==============================================================*/
+create table PURCHASE_MATER
+(
+   PURCHASE_ID          int(10)                    not null,
+   MATER_ID             int(10)                    not null,
+   MATER_NUM            numeric(10)                not null,
+   UNIT_PRICE           numeric(10)                    null,
+   MATER_SPEC           varchar(60)                    null,
+   PRICE                numeric(10)                    null,
+   DELIVER_DATE         timestamp                  not null,
+   MATER_REMRAK         varchar(255)                   null,
+   PURCHASE_STATE       char(1)                        not null
+);
+
+alter table PURCHASE_MATER
+   add constraint FK_PURCHASE_REFERENCE_PURCHASE foreign key (PURCHASE_ID)
+      references PURCHASE (PURCHASE_ID)
+      on update restrict
+      on delete restrict;
+
+alter table PURCHASE_MATER
+   add constraint FK_PURCHASE_REFERENCE_MATER foreign key (MATER_ID)
+      references MATER (MATER_ID)
+      on update restrict
+      on delete restrict;
+
+
 /*==============================================================*/
 /* prod 冗余prodType                                             */
 /* mater 冗余materType                                           */

@@ -17,6 +17,8 @@ module.exports = app => {
     router.get('/generatePDF',controller.importExport.generatePDF);
     router.get('/printPDF',controller.importExport.printPDF);
     router.get('/customerAll',controller.customer.indexNoPage);
+    router.get('/supplierAll',controller.supplier.indexNoPage);
+    router.get('/materAll',controller.mater.indexNoPage);
 
 
     router.resources('cust', '/cust', controller.cust);
@@ -30,4 +32,5 @@ module.exports = app => {
     router.resources('materType', '/materType', controller.materType);
     router.resources('prod', '/prod', controller.prod);
     router.resources('prodType', '/prodType', controller.prodType);
+    router.resources('purchase', '/purchase', controller.purchase);
 };

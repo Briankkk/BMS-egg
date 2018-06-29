@@ -104,7 +104,7 @@ module.exports = appInfo => {
         },
         pagination: {
             match(ctx) {
-                const urlArray = ['/customer', '/cust', '/supplier', '/staff', '/mater', '/prod','/authRequest','/handlerLog'];
+                const urlArray = ['/customer', '/cust', '/supplier', '/staff', '/mater', '/prod','/authRequest','/handlerLog','/purchase'];
                 let flag = false;
                 if (ctx.request.method === 'GET') {
                     _.forEach(urlArray, function (url) {

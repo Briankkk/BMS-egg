@@ -10,6 +10,15 @@ class SupplierService extends Service {
         return {total:total[0].cnt,list:suppliers};
     }
 
+    async indexNoPage() {
+        const helper = this.ctx.helper;
+        const client = helper.getClient();
+
+        const suppliers = await client.query('select * from supplier where CUST_ID=? ',helper.convertValue());
+
+        return suppliers;
+    }
+
     async exportFile(){
         const helper = this.ctx.helper;
         const client = helper.getClient();

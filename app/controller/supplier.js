@@ -15,6 +15,19 @@ class SupplierController extends Controller {
         }
 
     }
+
+    //查询/supplierAll GET
+    async indexNoPage(ctx) {
+        try {
+            const suppliers = await ctx.service.supplier.indexNoPage();
+            this.success(suppliers);
+        }
+        catch (e) {
+            ctx.logger.error(new Error(e));
+            this.fail("查询供应商失败")
+        }
+
+    }
     //查询单个/supplier/:id GET
     async show(ctx) {
         try {

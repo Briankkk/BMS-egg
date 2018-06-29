@@ -12,6 +12,13 @@ class MaterService extends Service {
         return {total:total[0].cnt,list:maters};
     }
 
+    async indexNoPage() {
+        const helper = this.ctx.helper;
+        const client = helper.getClient();
+        const maters = await client.query('select * from mater  where CUST_ID=? ',helper.convertValue());
+        return maters;
+    }
+
     async exportFile(){
         const helper = this.ctx.helper;
         const client = helper.getClient();
