@@ -10,6 +10,7 @@
     "egg-scripts": "^2.5.0",
     "egg-validate": "^1.0.0",
     "egg-view-nunjucks": "^2.2.0",
+    "moment": "^2.22.2",
     "node-xlsx": "^0.12.0",
     "pdfmake": "^0.1.36",
     "stream-wormhole": "^1.0.3",

@@ -44,8 +44,16 @@ class PurchaseService extends Service {
         const helper = this.ctx.helper;
         const client = helper.getClient();
 
-        const customer = await client.query('select a.PURCHASE_ID as PURCHASE_ID,a.SUPPLIER_ID as SUPPLIER_ID,a.PURCHASE_CODE as PURCHASE_CODE,a.PHONE as PHONE,a.REMARK as REMARK,a.DELIVER_DATE as DELIVER_DATE,a.CREATE_TIME as CREATE_TIME,a.STATE as STATE,b.MATER_ID as MATER_ID,b.MATER_NUM as MATER_NUM,b.UNIT_PRICE as UNIT_PRICE,b.MATER_SPEC as MATER_SPEC,b.PRICE as PRICE,b.DELIVER_DATE as DELIVER_DATE,b.MATER_REMRAK as MATER_REMRAK,b.PURCHASE_STATE as PURCHASE_STATE,c.SUPPLIER_NAME as SUPPLIER_NAME, d.MATER_NAME as MATER_NAME,d.MATER_CODE as MATER_CODE from purchase a join purchase_mater b on a.PURCHASE_ID=b.PURCHASE_ID join supplier c on a.SUPPLIER_ID=c.SUPPLIER_ID  join mater d on b.MATER_ID=d.MATER_ID where a.PURCHASE_ID=?', [this.ctx.params.id]);
-        return customer;
+        const result = await client.query('select a.PURCHASE_ID as PURCHASE_ID,a.SUPPLIER_ID as SUPPLIER_ID,a.PURCHASE_CODE as PURCHASE_CODE,a.PHONE as PHONE,a.REMARK as REMARK,a.DELIVER_DATE as DELIVER_DATE,a.CREATE_TIME as CREATE_TIME,a.STATE as STATE,b.MATER_ID as MATER_ID,b.MATER_NUM as MATER_NUM,b.UNIT_PRICE as UNIT_PRICE,b.MATER_SPEC as MATER_SPEC,b.PRICE as PRICE,b.DELIVER_DATE as DELIVER_DATE,b.MATER_REMRAK as MATER_REMRAK,b.PURCHASE_STATE as PURCHASE_STATE,c.SUPPLIER_NAME as SUPPLIER_NAME, d.MATER_NAME as MATER_NAME,d.MATER_CODE as MATER_CODE from purchase a join purchase_mater b on a.PURCHASE_ID=b.PURCHASE_ID join supplier c on a.SUPPLIER_ID=c.SUPPLIER_ID  join mater d on b.MATER_ID=d.MATER_ID where a.PURCHASE_ID=?', [this.ctx.params.id]);
+        return result;
+    }
+
+    async queryById(purchaseId) {
+        const helper = this.ctx.helper;
+        const client = helper.getClient();
+
+        const result = await client.query('select a.PURCHASE_ID as PURCHASE_ID,a.SUPPLIER_ID as SUPPLIER_ID,a.PURCHASE_CODE as PURCHASE_CODE,a.PHONE as PHONE,a.REMARK as REMARK,a.DELIVER_DATE as DELIVER_DATE,a.CREATE_TIME as CREATE_TIME,a.UPDATE_TIME as UPDATE_TIME,a.STATE as STATE,b.MATER_ID as MATER_ID,b.MATER_NUM as MATER_NUM,b.UNIT_PRICE as UNIT_PRICE,b.MATER_SPEC as MATER_SPEC,b.PRICE as PRICE,b.DELIVER_DATE as MATER_DELIVER_DATE,b.MATER_REMRAK as MATER_REMRAK,b.PURCHASE_STATE as PURCHASE_STATE,c.SUPPLIER_NAME as SUPPLIER_NAME, c.FAX as SUPPLIER_FAX,c.PHONE as SUPPLIER_PHONE,c.LINKMAN as SUPPLIER_LINKMAN, d.MATER_NAME as MATER_NAME,d.MATER_CODE as MATER_CODE,d.MATER_UNIT as MATER_UNIT,e.CUST_NAME as CUST_NAME,e.CUST_PHONE as CUST_PHONE,e.CUST_ADDRESS as CUST_ADDRESS,e.FAX as CUST_FAX,e.TAX_NUMBER as TAX_NUMBER,e.BANK_NAME as BANK_NAME,e.BANK_ACCOUNT as BANK_ACCOUNT,e.BANK_NUMBER as BANK_NUMBER,e.STORE_HOUSE as STORE_HOUSE from purchase a join purchase_mater b on a.PURCHASE_ID=b.PURCHASE_ID join supplier c on a.SUPPLIER_ID=c.SUPPLIER_ID  join mater d on b.MATER_ID=d.MATER_ID join CUST e on a.CUST_ID=e.CUST_ID where a.PURCHASE_ID=?', [purchaseId]);
+        return result;
     }
 
     async create(purchase, maters) {

@@ -88,8 +88,11 @@ class ImportExportController extends Controller {
                 case 'CUSTOMER':
                     docData.customerData = await ctx.service.customer.exportFile();
                     break;
+                case 'PURCHASE':
+                    docData.purchaseData = await ctx.service.purchase.queryById(ctx.query.purchaseId);
+                    break;
             }
-            docDefinition = getDocDefinition(exportType);
+            docDefinition = getDocDefinition(exportType,docData);
 
             const pdfDoc = printer.createPdfKitDocument(docDefinition);
 
@@ -154,7 +157,6 @@ class ImportExportController extends Controller {
             ctx.logger.info('fileType and fileName', fileType,fileName);
             let result;
             const obj = xlsx.parse(path.join(this.config.baseDir, 'app/public/upload/tmp', fileName));//配置excel文件的路径
-            console.log(obj);
             var excelData = obj[0].data;//excelObj是excel文件里第一个sheet文档的数据，obj[i].data表示excel文件第i+1个sheet文档的全部内容
             excelData.shift();
 
